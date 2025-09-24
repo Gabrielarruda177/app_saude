@@ -1,0 +1,105 @@
+import { StyleSheet } from "react-native";
+
+export default StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f2f2f2",
+    padding: 20,
+  },
+  box: {
+    width: "100%",
+    backgroundColor: "#fff",
+    padding: 20,
+    borderColor: "#202561",
+    borderWidth: 2,
+    borderRadius: 12,
+    elevation: 5,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowRadius: 6,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 20,
+    textAlign: "center",
+    color: "#202561",
+  },
+  label: {
+    fontSize: 16,
+    marginBottom: 6,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#202561",
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 16,
+  },
+  button: {
+    backgroundColor: "#202561",
+    color: "#fff",
+    padding: 14,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 10,
+  },
+  galleryButton: {
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: "#202561",
+    color: "#202561",
+  },
+  cameraButton: {
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: "#202561",
+    color: "#202561",
+  },
+  buttonTextSalvar: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  buttonText: {
+    color: "#202561",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  imagePreview: {
+    marginTop: 20,
+    width: "100%",
+    height: 200,
+    borderRadius: 8,
+    objectFit: "cover",
+  },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#00000099",
+  },
+  modalBox: {
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 12,
+    width: 300,
+  },
+  modalText: {
+    fontSize: 16,
+    color: "#333",
+    marginBottom: 15,
+  },
+  modalButton: {
+    backgroundColor: "#202561",
+    padding: 10,
+    borderRadius: 6,
+    alignItems: "center",
+  },
+  modalButtonText: {
+    color: "white",
+    fontWeight: "bold",
+  },
+});
