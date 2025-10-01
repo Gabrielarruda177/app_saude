@@ -1,72 +1,136 @@
 import { StyleSheet } from 'react-native';
 
+const DARK_BLUE = '#023E8A';
+const PRIMARY_BLUE = '#0077B6';
+const LIGHT_BACKGROUND = '#E6F0FA'; 
+const HIGH_SEVERITY = '#D32F2F'; 
+const MEDIUM_SEVERITY = '#FFC107'; 
+const LOW_SEVERITY = '#4CAF50'; 
+
 export default StyleSheet.create({
   container: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F0F8FF',
+    flex: 1,
+    backgroundColor: LIGHT_BACKGROUND,
     padding: 20,
   },
-  icon: {
-    marginBottom: 20,
-  },
+  
+  // Títulos
   title: {
     fontSize: 28,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 10,
+    fontWeight: "bold",
+    color: DARK_BLUE,
+    marginBottom: 5,
+    textAlign: "center",
   },
-  totalText: {
-    fontSize: 22,
-    color: '#007BFF',
-    fontWeight: '600',
-    marginBottom: 30,
+  subtitle: {
+    fontSize: 16,
+    color: '#555',
+    marginBottom: 20,
+    textAlign: "center",
   },
-  inputContainer: {
+
+  // Busca (Filtro)
+  searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
-    marginBottom: 20,
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    paddingHorizontal: 15,
+    marginBottom: 25,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
   },
-  input: {
+  searchIcon: {
+    marginRight: 10,
+    color: PRIMARY_BLUE,
+  },
+  searchInput: {
     flex: 1,
     height: 50,
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 10,
-    paddingHorizontal: 15,
-    marginRight: 10,
     fontSize: 16,
-    color: '#333',
+    color: DARK_BLUE,
   },
-  button: {
-    backgroundColor: '#007BFF',
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    elevation: 3,
+
+  // Lista
+  list: {
+    flex: 1,
+    width: '100%',
   },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
+  listContent: {
+    paddingBottom: 20, // Espaço no final da lista
   },
-  resetButton: {
+
+  // Item da Alergia
+  itemContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#dc3545',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    marginTop: 20,
-    elevation: 3,
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 15,
+    marginBottom: 10,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.08,
+    shadowRadius: 2,
+    borderLeftWidth: 6,
+    borderLeftColor: PRIMARY_BLUE, // Cor de destaque padrão
   },
-  resetButtonText: {
-    color: '#fff',
-    fontSize: 14,
+  itemContent: {
+    flex: 1,
+    marginLeft: 10,
+  },
+  itemName: {
+    fontSize: 18,
     fontWeight: 'bold',
-    marginLeft: 5,
+    color: DARK_BLUE,
+    marginBottom: 3,
   },
+  itemDetail: {
+    fontSize: 14,
+    color: '#777',
+  },
+  
+  // Indicador de Gravidade (Pequena barra colorida)
+  severityIndicator: {
+    width: 8,
+    height: '100%', // Para preencher a altura do item
+    borderRadius: 4,
+    marginRight: 10,
+  },
+  severityHigh: {
+    backgroundColor: HIGH_SEVERITY,
+  },
+  severityMedium: {
+    backgroundColor: MEDIUM_SEVERITY,
+  },
+  severityLow: {
+    backgroundColor: LOW_SEVERITY,
+  },
+
+  // Nenhum Resultado Encontrado
+  noResults: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 30,
+    marginTop: 50,
+  },
+  noResultsText: {
+    fontSize: 18,
+    color: DARK_BLUE,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop: 10,
+  },
+  noResultsHint: {
+    fontSize: 14,
+    color: '#777',
+    textAlign: 'center',
+    marginTop: 5,
+  }
 });

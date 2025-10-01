@@ -6,53 +6,39 @@ import styles from './styles';
 
 export default function SplashScreen() {
   const navigation = useNavigation();
-  const translateY = useRef(new Animated.Value(-100)).current; // Inicia a animação fora da tela, acima
-  const opacity = useRef(new Animated.Value(0)).current; // Inicia com opacidade 0
+  const translateY = useRef(new Animated.Value(-100)).current;
+  const opacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    // Animação de entrada do texto
-    const textAnimation = Animated.parallel([
+    Animated.parallel([
       Animated.timing(translateY, {
-        toValue: 0, // Posição final na tela
-        duration: 1500, // Duração da animação
+        toValue: 0,
+        duration: 1500,
         easing: Easing.out(Easing.ease),
         useNativeDriver: true,
       }),
       Animated.timing(opacity, {
-        toValue: 1, // Opacidade final 100%
+        toValue: 1,
         duration: 1500,
         useNativeDriver: true,
       }),
-    ]);
-
-    // Executa a animação do texto
-    textAnimation.start();
+    ]).start();
 
     const checkLogin = async () => {
       const usuarioSalvo = await AsyncStorage.getItem('usuarioLogado');
-      if (usuarioSalvo) {
-        navigation.replace('Home');
-      } else {
-        navigation.replace('Login');
-      }
+      navigation.replace(usuarioSalvo ? 'Home' : 'Login');
     };
 
     const timer = setTimeout(checkLogin, 3500);
     return () => clearTimeout(timer);
-  }, [navigation, opacity, translateY]);
+  }, []);
 
   return (
     <View style={styles.fundo}>
-      <Image
-        source={require('../../../assets/coracao.gif')}
-        style={styles.gif}
-        resizeMode="contain"
-      />
-
-      <Animated.View style={{ transform: [{ translateY: translateY }], opacity: opacity }}>
+      <Image source={require('../../../assets/coracao.gif')} style={styles.gif} resizeMode="contain" />
+      <Animated.View style={{ transform: [{ translateY }], opacity }}>
         <Text style={styles.Tittle}>Bem-Vindo ao MonitoraSaúde!</Text>
       </Animated.View>
-
     </View>
   );
 }

@@ -1,77 +1,148 @@
-    import React, { useState } from 'react';
-    import { View, Text, TextInput, Pressable, Modal, Alert, StatusBar } from 'react-native';
-    import { createUsuario } from "../../services/usuarioService";
-    import styles from './styles';
+import React, { useState } from 'react';
+import { View, Text, TextInput, Pressable, Modal, Alert, StatusBar, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { Picker } from '@react-native-picker/picker'; 
+import { Ionicons } from '@expo/vector-icons'; // <--- ícones modernos
+import { createUsuario } from "../../services/usuarioService";
+import styles from './styles';
 
-    export default function Cadastro({ navigation }) {
-        const [nome, setNome] = useState('');
-        const [modalVisible, setModalVisible] = useState(false);
+const TIPOS_SANGUINEOS = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
-        const salvarDados = async () => {
-            if (nome.trim() === '') {
-                Alert.alert('Erro', 'Por favor, preencha o nome!');
-                return;
-            }
+export default function Cadastro({ navigation }) {
+  const [form, setForm] = useState({
+    nome: '',
+    peso: '',
+    altura: '',
+    tipo_sanguineo: TIPOS_SANGUINEOS[0] 
+  });
+  const [modalVisible, setModalVisible] = useState(false);
 
-            const payload = {
-                nome,
-                peso: null,
-                altura: null,
-                tipo_sanguineo: null,
-                cep: null,
-                logradouro: null,
-                complemento: null,
-                bairro: null,
-                cidade: null,
-                estado: null,
-                email: "",
-                senha: ""
-            };
+  const handleChange = (name, value) => {
+    setForm(prev => ({ ...prev, [name]: value }));
+  };
 
-            try {
-                const res = await createUsuario(payload);
-                const userId = res.id;
-
-                if (!userId) {
-                    Alert.alert("Erro", "Não foi possível obter o ID do usuário.");
-                    return;
-                }
-
-                setModalVisible(true);
-                setTimeout(() => {
-                    setModalVisible(false);
-                    navigation.replace("Cadastro2", { userId });
-                }, 600);
-            } catch (e) {
-                console.error("Erro no cadastro:", e.response?.data || e.message);
-                Alert.alert('Erro', 'Não foi possível salvar os dados no servidor.');
-            }
-        };
-
-        return (
-            <View style={styles.container}>
-                <View style={styles.form}>
-                    <Text style={styles.text}>Nome:</Text>
-                    <TextInput
-                        style={styles.input}
-                        value={nome}
-                        onChangeText={setNome}
-                        placeholder="Digite seu nome"
-                    />
-
-                    <Pressable onPress={salvarDados} style={styles.btn}>
-                        <Text style={styles.btnText}>Continuar</Text>
-                    </Pressable>
-                </View>
-
-                <Modal transparent visible={modalVisible} animationType="slide">
-                    <View style={styles.modalOverlay}>
-                        <View style={styles.modalContent}>
-                            <Text style={styles.modalText}>Cadastro inicial realizado!</Text>
-                        </View>
-                    </View>
-                </Modal>
-                <StatusBar style="auto" />
-            </View>
-        );
+  const salvarDados = async () => {
+    if (!form.nome.trim() || !form.peso || !form.altura) {
+      Alert.alert('Erro', 'Por favor, preencha todos os campos (Nome, Peso e Altura)!');
+      return;
     }
+
+    const payload = {
+      nome: form.nome,
+      peso: parseFloat(form.peso.replace(',', '.')), 
+      altura: parseFloat(form.altura.replace(',', '.')), 
+      tipo_sanguineo: form.tipo_sanguineo,
+      cep: null, logradouro: null, complemento: null,
+      bairro: null, cidade: null, estado: null,
+      email: "", senha: ""
+    };
+
+    try {
+      const res = await createUsuario(payload);
+      const userId = res.id;
+      if (!userId) {
+        Alert.alert("Erro", "Não foi possível obter o ID do usuário.");
+        return;
+      }
+      setModalVisible(true);
+      setTimeout(() => {
+        setModalVisible(false);
+        navigation.replace("Cadastro2", { userId });
+      }, 600);
+      
+    } catch (e) {
+      console.error("Erro no cadastro:", e.response?.data || e.message);
+      Alert.alert('Erro', 'Não foi possível salvar os dados no servidor.');
+    }
+  };
+
+  return (
+    <KeyboardAvoidingView 
+        style={styles.container} 
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+      <ScrollView contentContainerStyle={{flexGrow: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <View style={styles.form}>
+          <Text style={styles.title}>Cadastro Inicial</Text>
+
+          {/* Nome */}
+          <View style={styles.fieldContainer}>
+            <Text style={styles.label}>Nome</Text>
+            <View style={styles.inputWrapper}>
+              <Ionicons name="person-outline" size={20} style={styles.inputIcon} />
+              <TextInput 
+                style={styles.input} 
+                value={form.nome} 
+                onChangeText={txt => handleChange('nome', txt)} 
+                placeholder="Digite seu nome" 
+                placeholderTextColor="#94A3B8"
+              />
+            </View>
+          </View>
+
+          {/* Peso */}
+          <View style={styles.fieldContainer}>
+            <Text style={styles.label}>Peso (kg)</Text>
+            <View style={styles.inputWrapper}>
+              <Ionicons name="fitness-outline" size={20} style={styles.inputIcon} />
+              <TextInput
+                style={styles.input}
+                value={form.peso}
+                onChangeText={txt => handleChange('peso', txt)}
+                placeholder="Ex: 75.5"
+                placeholderTextColor="#94A3B8"
+                keyboardType="numeric"
+              />
+            </View>
+          </View>
+
+          {/* Altura */}
+          <View style={styles.fieldContainer}>
+            <Text style={styles.label}>Altura (m)</Text>
+            <View style={styles.inputWrapper}>
+              <Ionicons name="body-outline" size={20} style={styles.inputIcon} />
+              <TextInput
+                style={styles.input}
+                value={form.altura}
+                onChangeText={txt => handleChange('altura', txt)}
+                placeholder="Ex: 1.75"
+                placeholderTextColor="#94A3B8"
+                keyboardType="numeric"
+              />
+            </View>
+          </View>
+
+          {/* Tipo Sanguíneo */}
+          <View style={styles.fieldContainer}>
+            <Text style={styles.label}>Tipo Sanguíneo</Text>
+            <View style={styles.pickerContainer}>
+              <Picker
+                selectedValue={form.tipo_sanguineo}
+                onValueChange={(itemValue) => handleChange('tipo_sanguineo', itemValue)}
+                style={{ color: "#03045e" }}
+              >
+                {TIPOS_SANGUINEOS.map((tipo) => (
+                  <Picker.Item key={tipo} label={tipo} value={tipo} />
+                ))}
+              </Picker>
+            </View>
+          </View>
+
+          {/* Botão */}
+          <Pressable onPress={salvarDados} style={styles.btn}>
+            <Text style={styles.btnText}>Continuar</Text>
+          </Pressable>
+        </View>
+      </ScrollView>
+
+      <Modal transparent visible={modalVisible} animationType="slide">
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>Dados pessoais salvos com sucesso!</Text>
+          </View>
+        </View>
+      </Modal>
+      
+      <StatusBar style="auto" />
+    </KeyboardAvoidingView>
+  );
+}
