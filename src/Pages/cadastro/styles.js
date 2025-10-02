@@ -11,9 +11,9 @@ export default StyleSheet.create({
 
   form: {
     backgroundColor: "#fff",
-    borderRadius: 20,
-    paddingVertical: 30,
-    paddingHorizontal: 25,
+    borderRadius: 30,
+    paddingVertical: 50,
+    paddingHorizontal: 65,
     width: "100%",
     maxWidth: 380,
     shadowColor: "#000",
@@ -51,8 +51,8 @@ export default StyleSheet.create({
     borderColor: "#90E0EF",
     backgroundColor: "#F8FBFF",
     borderRadius: 12,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 12,
   },
 
   inputIcon: {

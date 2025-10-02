@@ -17,6 +17,9 @@ import Diabete from "./src/Pages/Diabete";
 import PressaoAlta from "./src/Pages/PressaoAlta";
 import IMC from "./src/Pages/IMC";
 import Fruta from "./src/Pages/Fruta";
+import Perfil from "./src/Pages/perfil";
+
+// Criação do Stack Navigator
 
 const Stack = createNativeStackNavigator();
 
@@ -33,6 +36,7 @@ export default function App() {
         <Stack.Screen name="Cadastro2" component={Cadastro2} />
         <Stack.Screen name="Cadastro3" component={Cadastro3} />
         <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Perfil" component={Perfil} />
         <Stack.Screen name="Vacina" component={Vacina} />
         <Stack.Screen name="Aguinha" component={Aguinha} />
         <Stack.Screen name="Remedios" component={Remedios} />

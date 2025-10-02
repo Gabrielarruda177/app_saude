@@ -1,15 +1,43 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Pressable, Modal, Alert, StatusBar, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { Picker } from '@react-native-picker/picker'; 
-import { Ionicons } from '@expo/vector-icons'; // <--- ícones modernos
+import { Ionicons } from '@expo/vector-icons';
 import { createUsuario } from "../../services/usuarioService";
 import styles from './styles';
 
-const TIPOS_SANGUINEOS = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+const TIPOS_SANGUINEOS = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-', 'Não sei'];
+
+// Função de formatação para Data: DD/MM/AAAA
+const formatDataNasc = (text) => {
+  let cleaned = text.replace(/[^0-9]/g, '');
+  if (cleaned.length > 2 && cleaned.length <= 4) {
+    cleaned = cleaned.substring(0, 2) + '/' + cleaned.substring(2);
+  } else if (cleaned.length > 4) {
+    cleaned = cleaned.substring(0, 2) + '/' + cleaned.substring(2, 4) + '/' + cleaned.substring(4, 8);
+  }
+  return cleaned;
+};
+
+// Função para validar e converter a data para o formato YYYY-MM-DD
+const parseAndValidateDate = (dateString) => {
+    const parts = dateString.split('/');
+    if (parts.length === 3) {
+        const [day, month, year] = parts.map(p => parseInt(p, 10));
+        if (day >= 1 && day <= 31 && month >= 1 && month <= 12 && year >= 1900 && year <= new Date().getFullYear()) {
+            // Retorna no formato ISO (YYYY-MM-DD) para o banco de dados
+            const monthStr = month.toString().padStart(2, '0');
+            const dayStr = day.toString().padStart(2, '0');
+            return `${year}-${monthStr}-${dayStr}`;
+        }
+    }
+    return null; // Data inválida
+};
+
 
 export default function Cadastro({ navigation }) {
   const [form, setForm] = useState({
     nome: '',
+    data_nasc: '', // <-- NOVO CAMPO
     peso: '',
     altura: '',
     tipo_sanguineo: TIPOS_SANGUINEOS[0] 
@@ -17,17 +45,23 @@ export default function Cadastro({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
 
   const handleChange = (name, value) => {
+    if (name === 'data_nasc') {
+        value = formatDataNasc(value); // Formata a data enquanto digita
+    }
     setForm(prev => ({ ...prev, [name]: value }));
   };
 
   const salvarDados = async () => {
-    if (!form.nome.trim() || !form.peso || !form.altura) {
-      Alert.alert('Erro', 'Por favor, preencha todos os campos (Nome, Peso e Altura)!');
+    const dataIso = parseAndValidateDate(form.data_nasc);
+
+    if (!form.nome.trim() || !dataIso || !form.peso || !form.altura) { // <-- VALIDAÇÃO DA DATA
+      Alert.alert('Erro', 'Por favor, preencha todos os campos corretamente (incluindo Data de Nascimento no formato DD/MM/AAAA)!');
       return;
     }
 
     const payload = {
       nome: form.nome,
+      data_nasc: dataIso, // <-- ENVIA A DATA FORMATADA PARA ISO
       peso: parseFloat(form.peso.replace(',', '.')), 
       altura: parseFloat(form.altura.replace(',', '.')), 
       tipo_sanguineo: form.tipo_sanguineo,
@@ -75,6 +109,23 @@ export default function Cadastro({ navigation }) {
                 onChangeText={txt => handleChange('nome', txt)} 
                 placeholder="Digite seu nome" 
                 placeholderTextColor="#94A3B8"
+              />
+            </View>
+          </View>
+          
+          {/* Data de Nascimento <-- NOVO CAMPO */}
+          <View style={styles.fieldContainer}>
+            <Text style={styles.label}>Data de Nascimento (DD/MM/AAAA)</Text>
+            <View style={styles.inputWrapper}>
+              <Ionicons name="calendar-outline" size={20} style={styles.inputIcon} />
+              <TextInput 
+                style={styles.input} 
+                value={form.data_nasc} 
+                onChangeText={txt => handleChange('data_nasc', txt)} 
+                placeholder="Ex: 01/01/2000" 
+                placeholderTextColor="#94A3B8"
+                keyboardType="numeric"
+                maxLength={10}
               />
             </View>
           </View>
