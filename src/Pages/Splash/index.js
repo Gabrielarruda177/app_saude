@@ -17,7 +17,6 @@ export default function SplashScreen() {
   const pulseAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    // Animação do ícone principal
     Animated.sequence([
       Animated.spring(scaleAnim, {
         toValue: 1,
@@ -26,14 +25,12 @@ export default function SplashScreen() {
         useNativeDriver: true,
       }),
       Animated.parallel([
-        // Rotação sutil
         Animated.timing(rotateAnim, {
           toValue: 1,
           duration: 800,
           easing: Easing.out(Easing.ease),
           useNativeDriver: true,
         }),
-        // Fade do título
         Animated.timing(fadeTitle, {
           toValue: 1,
           duration: 600,
@@ -43,7 +40,6 @@ export default function SplashScreen() {
       ]),
     ]).start();
 
-    // Animação do subtítulo
     Animated.timing(fadeSubtitle, {
       toValue: 1,
       duration: 600,
@@ -51,7 +47,6 @@ export default function SplashScreen() {
       useNativeDriver: true,
     }).start();
 
-    // Animação da barra de progresso
     Animated.timing(progressAnim, {
       toValue: 1,
       duration: 2500,
@@ -60,7 +55,6 @@ export default function SplashScreen() {
       useNativeDriver: false,
     }).start();
 
-    // Animação de pulso contínua
     Animated.loop(
       Animated.sequence([
         Animated.timing(pulseAnim, {
@@ -101,18 +95,14 @@ export default function SplashScreen() {
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#5B21B6" />
       
-      {/* Background com gradiente simulado */}
       <View style={styles.gradientTop} />
       <View style={styles.gradientBottom} />
 
-      {/* Círculos decorativos de fundo */}
       <View style={styles.circleDecor1} />
       <View style={styles.circleDecor2} />
       <View style={styles.circleDecor3} />
 
-      {/* Conteúdo Principal */}
       <View style={styles.content}>
-        {/* Ícone Principal com animação */}
         <Animated.View
           style={[
             styles.iconContainer,
@@ -131,19 +121,16 @@ export default function SplashScreen() {
           </View>
         </Animated.View>
 
-        {/* Título */}
         <Animated.View style={[styles.titleContainer, { opacity: fadeTitle }]}>
           <Text style={styles.title}>MonitoraSaúde</Text>
           <View style={styles.titleUnderline} />
         </Animated.View>
 
-        {/* Subtítulo */}
         <Animated.View style={[styles.subtitleContainer, { opacity: fadeSubtitle }]}>
           <Icon name="shield-check" size={20} color="#A78BFA" />
           <Text style={styles.subtitle}>Sua saúde em boas mãos</Text>
         </Animated.View>
 
-        {/* Barra de Progresso */}
         <View style={styles.progressContainer}>
           <Animated.View
             style={[
@@ -153,13 +140,11 @@ export default function SplashScreen() {
           />
         </View>
 
-        {/* Versão */}
         <Animated.Text style={[styles.version, { opacity: fadeSubtitle }]}>
-          Versão 1.0.0
+          Versão 4.0
         </Animated.Text>
       </View>
 
-      {/* Ícones decorativos flutuantes */}
       <Animated.View style={[styles.floatingIcon1, { opacity: fadeSubtitle }]}>
         <Icon name="water" size={30} color="rgba(255, 255, 255, 0.3)" />
       </Animated.View>

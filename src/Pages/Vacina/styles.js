@@ -1,177 +1,313 @@
 import { StyleSheet, Dimensions } from "react-native";
+
 const { width } = Dimensions.get('window');
 
-// Cores Azuis e Brancas (Tema MonitóriaSaúde)
-const PRIMARY_BLUE = '#0077B6'; // Azul principal (forte, para cards e detalhes)
-const DARK_BLUE = '#023E8A';   // Azul escuro (cabeçalhos e texto forte)
-const LIGHT_BACKGROUND = '#F5F5F5'; // Fundo suave
-
 export default StyleSheet.create({
-  // CONTAINER PRINCIPAL
-  mainContainer: {
+  container: {
     flex: 1,
-    backgroundColor: LIGHT_BACKGROUND,
-  },
-  scrollContent: {
-    paddingHorizontal: 15,
-    paddingVertical: 20,
-  },
-  
-  // CABEÇALHO SIMPLES - SEM FUNDO AZUL
-  header: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
-    paddingHorizontal: 15,
-    paddingVertical: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
+    backgroundColor: '#F8F9FA',
   },
 
-  // TÍTULO da tela (VACINAS) - AGORA EM AZUL ESCURO
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: DARK_BLUE,
-    textAlign: "center",
-    letterSpacing: 1,
+  // Header
+  header: {
+    backgroundColor: '#5B21B6',
+    paddingTop: 20,
+    paddingBottom: 25,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    borderBottomLeftRadius: 25,
+    borderBottomRightRadius: 25,
+    elevation: 8,
+    shadowColor: '#5B21B6',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
   },
-  
-  // CONTAINER DOS BOTÕES (Filtro)
-  filterContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    padding: 10,
-    backgroundColor: 'white',
-    marginHorizontal: 10,
-    marginTop: 10,
-    borderRadius: 10,
+  headerIconContainer: {
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    borderRadius: 50,
+    padding: 15,
+    marginBottom: 15,
+  },
+  title: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    color: '#FFF',
+    marginBottom: 5,
+    letterSpacing: 0.5,
+  },
+  subtitle: {
+    fontSize: 14,
+    color: 'rgba(255, 255, 255, 0.9)',
+    fontWeight: '500',
+  },
+
+  // Seção de Filtros
+  filterSection: {
+    backgroundColor: '#FFF',
+    paddingVertical: 15,
+    marginTop: -15,
+    marginHorizontal: 15,
+    borderRadius: 15,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+  },
+  filterSectionTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#6B7280',
+    marginBottom: 12,
+    marginLeft: 15,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  filterScrollContainer: {
+    paddingHorizontal: 15,
+    gap: 10,
+  },
+  filterButton: {
+    width: 130,
+    backgroundColor: '#F8F9FA',
+    borderRadius: 15,
+    padding: 15,
+    alignItems: 'center',
+    marginRight: 10,
+    borderWidth: 2,
+    borderColor: '#E5E7EB',
     elevation: 2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
   },
-  
-  // BOTÕES (Cards pequenos no topo)
-  filterButton: {
-    width: (width - 50) / 4, 
-    backgroundColor: '#F8F9FA',
-    borderRadius: 8,
-    padding: 5, 
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 85, 
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
-  },
-
-  // ESTILO DO BOTÃO ATIVO/SELECIONADO
   filterButtonActive: {
-    backgroundColor: PRIMARY_BLUE,
-    borderColor: DARK_BLUE,
+    borderColor: 'transparent',
+    elevation: 5,
   },
-
-  // TEXTOS E ÍCONES DOS BOTÕES
-  filterIcon: {
-    color: PRIMARY_BLUE,
-    marginBottom: 4,
-  },
-  filterIconActive: {
-    color: '#fff',
+  filterIconContainer: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: '#F8F9FA',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
   },
   filterText: {
-    fontSize: 9, 
-    fontWeight: "bold",
-    color: DARK_BLUE,
+    fontSize: 13,
+    fontWeight: 'bold',
+    color: '#2C3E50',
     textAlign: 'center',
-    lineHeight: 11,
+    marginBottom: 4,
+    letterSpacing: 0.2,
   },
   filterTextActive: {
-    color: '#fff',
+    color: '#FFF',
   },
   filterSubtitle: {
-    fontSize: 7, 
-    color: '#666',
+    fontSize: 11,
+    color: '#6B7280',
     textAlign: 'center',
   },
   filterSubtitleActive: {
-    color: '#ccc',
+    color: 'rgba(255, 255, 255, 0.8)',
   },
 
-  // BOTÃO LIMPAR FILTRO
-  clearFilterButton: {
-    backgroundColor: '#6c757d',
-    padding: 10,
-    marginHorizontal: 20,
-    marginVertical: 10,
-    borderRadius: 8,
+  // Botão Limpar
+  clearButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFF',
+    marginHorizontal: 15,
+    marginTop: 15,
+    paddingVertical: 12,
+    borderRadius: 12,
+    gap: 8,
+    borderWidth: 2,
+    borderColor: '#E5E7EB',
+  },
+  clearButtonText: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#6B7280',
+  },
+
+  // Conteúdo
+  content: {
+    flex: 1,
+    marginTop: 15,
+  },
+
+  // Seção de Categoria
+  categorySection: {
+    marginBottom: 20,
+    marginHorizontal: 15,
+  },
+  categoryHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 20,
+    borderRadius: 15,
+    marginBottom: 10,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 3,
+  },
+  categoryHeaderContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 15,
+    flex: 1,
+  },
+  categoryHeaderText: {
+    flex: 1,
+  },
+  categoryTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#FFF',
+    marginBottom: 3,
+    letterSpacing: 0.3,
+  },
+  categorySubtitle: {
+    fontSize: 13,
+    color: 'rgba(255, 255, 255, 0.9)',
+    fontWeight: '500',
+  },
+  vaccineCount: {
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: 'center',
     alignItems: 'center',
   },
-  clearFilterText: {
-    color: 'white',
+  vaccineCountText: {
+    fontSize: 18,
     fontWeight: 'bold',
+    color: '#FFF',
   },
-  
-  // SEÇÃO DE CONTEÚDO (Onde as vacinas são listadas)
-  sectionCard: {
-    backgroundColor: '#FFFFFF',
+
+  // Lista de Vacinas
+  vaccinesList: {
+    gap: 8,
+  },
+  vaccineCard: {
+    backgroundColor: '#FFF',
     borderRadius: 12,
     padding: 15,
+    borderLeftWidth: 4,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+  },
+  vaccineHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  vaccineDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+  },
+  vaccineTextContainer: {
+    flex: 1,
+  },
+  vaccineName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#2C3E50',
+    marginBottom: 3,
+    letterSpacing: 0.2,
+  },
+  vaccineDetail: {
+    fontSize: 13,
+    color: '#6B7280',
+    lineHeight: 18,
+  },
+
+  // Nota
+  noteCard: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    backgroundColor: '#FEF3C7',
+    padding: 15,
+    marginHorizontal: 15,
+    marginBottom: 15,
+    borderRadius: 12,
+    gap: 10,
+    borderLeftWidth: 4,
+    borderLeftColor: '#F59E0B',
+  },
+  noteText: {
+    flex: 1,
+    fontSize: 13,
+    color: '#92400E',
+    lineHeight: 20,
+    fontWeight: '500',
+  },
+
+  // Estatísticas
+  statsCard: {
+    backgroundColor: '#FFF',
+    marginHorizontal: 15,
     marginBottom: 20,
-    elevation: 4,
+    padding: 20,
+    borderRadius: 15,
+    elevation: 3,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 3,
-    borderLeftWidth: 5,
-    borderLeftColor: PRIMARY_BLUE,
   },
-  
-  // ESTILO PARA SEÇÃO FILTRADA (destaque)
-  sectionCardFiltered: {
-    backgroundColor: '#F0F8FF',
-    borderLeftWidth: 5,
-    borderLeftColor: DARK_BLUE,
-  },
-
-  sectionTitle: {
+  statsTitle: {
     fontSize: 18,
-    fontWeight: "800",
-    color: DARK_BLUE,
-    marginBottom: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#EEE',
-    paddingBottom: 5,
-  },
-
-  // ITENS DA VACINA
-  itemContainer: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    marginBottom: 8,
-  },
-  itemBullet: {
-    fontSize: 16,
-    color: PRIMARY_BLUE,
-    marginRight: 8,
-    lineHeight: 22,
     fontWeight: 'bold',
+    color: '#2C3E50',
+    marginBottom: 15,
+    letterSpacing: 0.3,
   },
-  item: {
+  statsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+  },
+  statItem: {
     flex: 1,
-    fontSize: 15,
-    color: '#333',
-    lineHeight: 22,
+    minWidth: '45%',
+    backgroundColor: '#F8F9FA',
+    padding: 15,
+    borderRadius: 12,
+    alignItems: 'center',
   },
-
-  // NOTA DE RODAPÉ
-  note: {
-    fontSize: 13,
-    color: '#777',
-    marginTop: 10,
-    textAlign: "center",
-    fontStyle: 'italic',
-    paddingHorizontal: 10,
+  statIcon: {
+    width: 45,
+    height: 45,
+    borderRadius: 22.5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  statNumber: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#2C3E50',
+    marginBottom: 4,
+  },
+  statLabel: {
+    fontSize: 12,
+    color: '#6B7280',
+    textAlign: 'center',
+    fontWeight: '600',
   },
 });
