@@ -1,232 +1,308 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, Pressable, ScrollView, Modal, Alert, StatusBar, KeyboardAvoidingView, Platform } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import {
+    View, Text, TextInput, Pressable, ScrollView, Modal,
+    StatusBar, KeyboardAvoidingView, Platform, Animated
+} from "react-native";
 import { Ionicons } from '@expo/vector-icons';
-import styles from "./styles";
 import { updateUsuario } from "../../services/usuarioService";
+import styles from "./styles";
 
 export default function Cadastro2({ navigation, route }) {
-const userId = route.params?.userId;
-const [form, setForm] = useState({
-cep: '', logradouro: '', numero: '', // <-- NOVO CAMPO: numero
-complemento: '', bairro: '', cidade: '', estado: ''
-});
-const [modalVisible, setModalVisible] = useState(false);
+    const userId = route.params?.userId;
+    const [form, setForm] = useState({
+        cep: '', logradouro: '', numero: '',
+        complemento: '', bairro: '', cidade: '', estado: ''
+    });
+    const [modalVisible, setModalVisible] = useState(false);
+    const [mensagemModal, setMensagemModal] = useState('');
+    const [tipoModal, setTipoModal] = useState('error');
 
-useEffect(() => {
-    if (!userId) {
-        Alert.alert("Erro", "ID de usuário não encontrado. Voltando ao início.");
-        navigation.replace("Cadastro");
-    }
-}, []);
+    const scaleAnim = useRef(new Animated.Value(1)).current;
+    const fadeAnim = useRef(new Animated.Value(0)).current;
+    const slideAnim = useRef(new Animated.Value(50)).current;
 
-const handleChange = (name, value) => {
-    setForm(prev => ({ ...prev, [name]: value }));
-};
+    useEffect(() => {
+        Animated.parallel([
+            Animated.timing(fadeAnim, {
+                toValue: 1,
+                duration: 800,
+                useNativeDriver: true,
+            }),
+            Animated.timing(slideAnim, {
+                toValue: 0,
+                duration: 800,
+                useNativeDriver: true,
+            }),
+        ]).start();
 
-// Lógica de busca de CEP
-useEffect(() => {
-    const buscarCep = async () => {
-        if (form.cep.length === 8) {
-            // Limpa campos não preenchidos pelo CEP
-            setForm(prev => ({
-                ...prev,
-                logradouro: "",
-                complemento: "",
-                bairro: "",
-                cidade: "",
-                estado: "",
-            }));
+        if (!userId) {
+            mostrarModal("ID de usuário não encontrado. Voltando ao início.", 'error');
+            setTimeout(() => navigation.replace("Cadastro"), 2000);
+        }
+    }, [userId]);
 
-            try {
-                // Certifique-se de que a URL de busca de CEP está correta:
-                const res = await fetch(`https://viacep.com.br/ws/${form.cep}/json/`);
-                const data = await res.json();
-                if (!data.erro) {
-                    setForm(prev => ({
-                        ...prev,
-                        logradouro: data.logradouro || "",
-                        complemento: data.complemento || "",
-                        bairro: data.bairro || "",
-                        cidade: data.localidade || "",
-                        estado: data.uf || "",
-                    }));
-                } else {
-                    Alert.alert("Atenção", "CEP não encontrado ou inválido.");
+    const mostrarModal = (mensagem, tipo = 'error') => {
+        setMensagemModal(mensagem);
+        setTipoModal(tipo);
+        setModalVisible(true);
+    };
+
+    const handleChange = (name, value) => {
+        setForm(prev => ({ ...prev, [name]: value }));
+    };
+
+    // Lógica de busca de CEP
+    useEffect(() => {
+        const buscarCep = async () => {
+            if (form.cep.length === 8) {
+                setForm(prev => ({
+                    ...prev,
+                    logradouro: "", complemento: "", bairro: "", cidade: "", estado: "",
+                }));
+                try {
+                    const res = await fetch(`https://viacep.com.br/ws/${form.cep}/json/`);
+                    const data = await res.json();
+                    if (!data.erro) {
+                        setForm(prev => ({
+                            ...prev,
+                            logradouro: data.logradouro || "",
+                            complemento: data.complemento || "",
+                            bairro: data.bairro || "",
+                            cidade: data.localidade || "",
+                            estado: data.uf || "",
+                        }));
+                    } else {
+                        mostrarModal("CEP não encontrado ou inválido.", 'error');
+                    }
+                } catch {
+                    mostrarModal("Falha ao consultar CEP. Verifique sua conexão.", 'error');
                 }
-            } catch {
-                Alert.alert("Erro", "Falha ao consultar CEP");
             }
+        };
+        buscarCep();
+    }, [form.cep]);
+
+    const animarPress = () => {
+        Animated.sequence([
+            Animated.timing(scaleAnim, { toValue: 0.95, duration: 100, useNativeDriver: true }),
+            Animated.timing(scaleAnim, { toValue: 1, duration: 100, useNativeDriver: true }),
+        ]).start(salvarDados);
+    };
+
+    const salvarDados = async () => {
+        if (!form.cep || form.cep.length < 8) {
+            mostrarModal("Preencha o CEP corretamente com 8 dígitos.", 'error');
+            return;
+        }
+        if (!form.numero.trim()) {
+            mostrarModal("O campo número é obrigatório.", 'error');
+            return;
+        }
+
+        const payload = {
+            cep: form.cep,
+            logradouro: form.logradouro,
+            numero: form.numero,
+            complemento: form.complemento,
+            bairro: form.bairro,
+            cidade: form.cidade,
+            estado: form.estado
+        };
+
+        try {
+            await updateUsuario(userId, payload);
+            mostrarModal("Endereço salvo com sucesso!", 'success');
+            setTimeout(() => {
+                setModalVisible(false);
+                navigation.replace("Cadastro3", { userId });
+            }, 1500);
+        } catch (e) {
+            console.error("Erro ao atualizar usuário:", e.response?.data || e.message);
+            mostrarModal("Não foi possível salvar os dados. Tente novamente.", 'error');
         }
     };
-    buscarCep();
-}, [form.cep]);
 
-const salvarDados = async () => {
-    // Adicionando validação para o número
-    if (!form.cep || form.cep.length < 8 || !form.numero.trim()) {
-        Alert.alert("Erro", "Preencha o CEP corretamente (8 dígitos) e o Número do endereço.");
-        return;
-    }
+    return (
+        <KeyboardAvoidingView
+            style={styles.container}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        >
+            <StatusBar barStyle="light-content" backgroundColor="#5B21B6" />
 
-    const payload = {
-        cep: form.cep,
-        logradouro: form.logradouro,
-        numero: form.numero, // <-- NOVO CAMPO NO PAYLOAD
-        complemento: form.complemento,
-        bairro: form.bairro,
-        cidade: form.cidade,
-        estado: form.estado
-    };
+            <View style={styles.backgroundTop} />
+            <View style={styles.backgroundCircle1} />
+            <View style={styles.backgroundCircle2} />
 
-    try {
-        await updateUsuario(userId, payload);
-        setModalVisible(true);
-        setTimeout(() => {
-            setModalVisible(false);
-            navigation.replace("Cadastro3", { userId });
-        }, 700);
-    } catch (e) {
-        console.error("Erro ao atualizar usuário:", e.response?.data || e.message);
-        Alert.alert("Erro", "Não foi possível salvar os dados. Verifique sua conexão ou servidor.");
-    }
-};
-
-return (
-    <KeyboardAvoidingView 
-        style={styles.container} 
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
-        <ScrollView contentContainerStyle={{flexGrow: 1, justifyContent: 'center', alignItems: 'center'}}>
-            <View style={styles.form}>
-                <Text style={styles.title}>Endereço</Text>
-                
-                {/* CEP */}
-                <View style={styles.fieldContainer}>
-                    <Text style={styles.label}>CEP:</Text>
-                    <View style={styles.inputWrapper}>
-                        <Ionicons name="map-outline" size={20} style={styles.inputIcon} />
-                        <TextInput
-                            style={styles.input}
-                            value={form.cep}
-                            onChangeText={txt => handleChange('cep', txt.replace(/[^0-9]/g, '').substring(0, 8))}
-                            placeholder="Apenas números (Ex: 01000000)"
-                            placeholderTextColor="#94A3B8"
-                            keyboardType="numeric"
-                        />
+            <Animated.View
+                style={[
+                    styles.content,
+                    {
+                        opacity: fadeAnim,
+                        transform: [{ translateY: slideAnim }]
+                    }
+                ]}
+            >
+                <View style={styles.logoContainer}>
+                    <View style={styles.logoCircle}>
+                        <Ionicons name="location" size={80} color="#FFF" />
                     </View>
                 </View>
 
-                {/* Logradouro */}
-                <View style={styles.fieldContainer}>
-                    <Text style={styles.label}>Rua/Logradouro:</Text>
-                    <View style={styles.inputWrapper}>
-                        <Ionicons name="road-outline" size={20} style={styles.inputIcon} />
-                        <TextInput
-                            style={styles.input}
-                            value={form.logradouro}
-                            onChangeText={txt => handleChange('logradouro', txt)}
-                            placeholder="Rua preenchida pelo CEP"
-                            placeholderTextColor="#94A3B8"
-                            editable={!form.logradouro} // Opcional: só permite editar se o CEP não preencheu
-                        />
-                    </View>
-                </View>
-                
-                {/* Número <-- NOVO CAMPO */}
-                <View style={styles.fieldContainer}>
-                    <Text style={styles.label}>Número:</Text>
-                    <View style={styles.inputWrapper}>
-                        <Ionicons name="location-outline" size={20} style={styles.inputIcon} />
-                        <TextInput
-                            style={styles.input}
-                            value={form.numero}
-                            onChangeText={txt => handleChange('numero', txt)}
-                            placeholder="Número da residência"
-                            placeholderTextColor="#94A3B8"
-                            keyboardType="numeric"
-                        />
-                    </View>
-                </View>
+                <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <View style={styles.card}>
+                        <Text style={styles.title}>Seu Endereço</Text>
+                        <Text style={styles.subtitle}>Informe onde você mora</Text>
 
-                {/* Complemento */}
-                <View style={styles.fieldContainer}>
-                    <Text style={styles.label}>Complemento:</Text>
-                    <View style={styles.inputWrapper}>
-                        <Ionicons name="home-outline" size={20} style={styles.inputIcon} />
-                        <TextInput
-                            style={styles.input}
-                            value={form.complemento}
-                            onChangeText={txt => handleChange('complemento', txt)}
-                            placeholder="Apto/Casa/Bloco (opcional)"
-                            placeholderTextColor="#94A3B8"
-                        />
-                    </View>
-                </View>
-
-                {/* Bairro */}
-                <View style={styles.fieldContainer}>
-                    <Text style={styles.label}>Bairro:</Text>
-                    <View style={styles.inputWrapper}>
-                        <Ionicons name="business-outline" size={20} style={styles.inputIcon} />
-                        <TextInput
-                            style={styles.input}
-                            value={form.bairro}
-                            onChangeText={txt => handleChange('bairro', txt)}
-                            placeholder="Bairro preenchido pelo CEP"
-                            placeholderTextColor="#94A3B8"
-                            editable={!form.bairro} // Opcional: só permite editar se o CEP não preencheu
-                        />
-                    </View>
-                </View>
-
-                {/* Cidade / Estado */}
-                <View style={styles.fieldContainer}>
-                    <Text style={styles.label}>Cidade / Estado:</Text>
-                    <View style={styles.row}>
-                        <View style={styles.halfInput}>
+                        {/* CEP */}
+                        <View style={styles.fieldContainer}>
+                            <Text style={styles.label}>CEP</Text>
                             <View style={styles.inputWrapper}>
+                                <Ionicons name="map-outline" size={20} color="#5B21B6" style={styles.inputIcon} />
                                 <TextInput
                                     style={styles.input}
-                                    value={form.cidade}
-                                    placeholder="Cidade"
-                                    placeholderTextColor="#94A3B8"
-                                    onChangeText={txt => handleChange('cidade', txt)}
-                                    editable={!form.cidade} // Opcional
+                                    value={form.cep}
+                                    onChangeText={txt => handleChange('cep', txt.replace(/[^0-9]/g, '').substring(0, 8))}
+                                    placeholder="Apenas números"
+                                    placeholderTextColor="#9CA3AF"
+                                    keyboardType="numeric"
+                                    maxLength={8}
                                 />
                             </View>
                         </View>
-                        <View style={[styles.halfInput, { flex: 0.4 }]}>
+
+                        {/* Logradouro */}
+                        <View style={styles.fieldContainer}>
+                            <Text style={styles.label}>Logradouro</Text>
                             <View style={styles.inputWrapper}>
+                                <Ionicons name="road-outline" size={20} color="#5B21B6" style={styles.inputIcon} />
                                 <TextInput
                                     style={styles.input}
-                                    value={form.estado}
-                                    placeholder="UF"
-                                    placeholderTextColor="#94A3B8"
-                                    onChangeText={txt => handleChange('estado', txt.toUpperCase())}
-                                    autoCapitalize="characters"
-                                    maxLength={2}
-                                    editable={!form.estado} // Opcional
+                                    value={form.logradouro}
+                                    onChangeText={txt => handleChange('logradouro', txt)}
+                                    placeholder="Rua preenchida pelo CEP"
+                                    placeholderTextColor="#9CA3AF"
+                                    editable={false} // Bloqueia edição manual
                                 />
                             </View>
                         </View>
-                    </View>
-                </View>
-                
-                <Pressable style={styles.btn} onPress={salvarDados}>
-                    <Text style={styles.btnText}>Continuar</Text>
-                </Pressable>
-            </View>
-        </ScrollView>
-        
-        <Modal transparent visible={modalVisible} animationType="fade">
-            <View style={styles.modalOverlay}>
-                <View style={styles.modalContent}>
-                    <Text style={styles.modalText}>Dados de endereço atualizados!</Text>
-                </View>
-            </View>
-        </Modal>
-        <StatusBar style="auto" />
-    </KeyboardAvoidingView>
-);
 
+                        {/* Número e Complemento */}
+                        <View style={styles.row}>
+                            <View style={[styles.fieldContainer, { flex: 2, marginRight: 10 }]}>
+                                <Text style={styles.label}>Número</Text>
+                                <View style={styles.inputWrapper}>
+                                    <Ionicons name="home-outline" size={20} color="#5B21B6" style={styles.inputIcon} />
+                                    <TextInput
+                                        style={styles.input}
+                                        value={form.numero}
+                                        onChangeText={txt => handleChange('numero', txt)}
+                                        placeholder="Nº"
+                                        placeholderTextColor="#9CA3AF"
+                                        keyboardType="numeric"
+                                    />
+                                </View>
+                            </View>
+                            <View style={[styles.fieldContainer, { flex: 3 }]}>
+                                <Text style={styles.label}>Complemento</Text>
+                                <View style={styles.inputWrapper}>
+                                    <TextInput
+                                        style={styles.input}
+                                        value={form.complemento}
+                                        onChangeText={txt => handleChange('complemento', txt)}
+                                        placeholder="Opcional"
+                                        placeholderTextColor="#9CA3AF"
+                                    />
+                                </View>
+                            </View>
+                        </View>
+
+                        {/* Bairro */}
+                        <View style={styles.fieldContainer}>
+                            <Text style={styles.label}>Bairro</Text>
+                            <View style={styles.inputWrapper}>
+                                <Ionicons name="business-outline" size={20} color="#5B21B6" style={styles.inputIcon} />
+                                <TextInput
+                                    style={styles.input}
+                                    value={form.bairro}
+                                    onChangeText={txt => handleChange('bairro', txt)}
+                                    placeholder="Bairro preenchido pelo CEP"
+                                    placeholderTextColor="#9CA3AF"
+                                    editable={false}
+                                />
+                            </View>
+                        </View>
+
+                        {/* Cidade / Estado */}
+                        <View style={styles.fieldContainer}>
+                            <Text style={styles.label}>Cidade / Estado</Text>
+                            <View style={styles.row}>
+                                <View style={styles.halfInput}>
+                                    <View style={styles.inputWrapper}>
+                                        <TextInput
+                                            style={styles.input}
+                                            value={form.cidade}
+                                            placeholder="Cidade"
+                                            placeholderTextColor="#9CA3AF"
+                                            editable={false}
+                                        />
+                                    </View>
+                                </View>
+                                <View style={[styles.halfInput, { flex: 0.4, marginLeft: 10 }]}>
+                                    <View style={styles.inputWrapper}>
+                                        <TextInput
+                                            style={[styles.input, { textAlign: 'center' }]}
+                                            value={form.estado}
+                                            placeholder="UF"
+                                            placeholderTextColor="#9CA3AF"
+                                            editable={false}
+                                            maxLength={2}
+                                        />
+                                    </View>
+                                </View>
+                            </View>
+                        </View>
+
+                        {/* Botão Continuar */}
+                        <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
+                            <Pressable style={styles.btn} onPress={animarPress}>
+                                <Text style={styles.btnText}>Continuar</Text>
+                            </Pressable>
+                        </Animated.View>
+                    </View>
+                </ScrollView>
+
+                <Text style={styles.footer}>MonitoraSaúde © 2024</Text>
+            </Animated.View>
+
+            {/* Modal */}
+            <Modal visible={modalVisible} transparent animationType="fade">
+                <View style={styles.modalOverlay}>
+                    <Animated.View style={styles.modalContent}>
+                        <View style={[
+                            styles.modalIcon,
+                            { backgroundColor: tipoModal === 'success' ? '#D1FAE5' : '#FEE2E2' }
+                        ]}>
+                            <Ionicons
+                                name={tipoModal === 'success' ? "checkmark-circle" : "alert-circle"}
+                                size={50}
+                                color={tipoModal === 'success' ? "#10B981" : "#EF4444"}
+                            />
+                        </View>
+                        <Text style={styles.modalTitle}>
+                            {tipoModal === 'success' ? 'Sucesso!' : 'Atenção'}
+                        </Text>
+                        <Text style={styles.modalText}>{mensagemModal}</Text>
+                        {tipoModal !== 'success' && (
+                            <Pressable
+                                style={styles.modalBotao}
+                                onPress={() => setModalVisible(false)}
+                            >
+                                <Text style={styles.modalBotaoTexto}>Entendi</Text>
+                            </Pressable>
+                        )}
+                    </Animated.View>
+                </View>
+            </Modal>
+        </KeyboardAvoidingView>
+    );
 }

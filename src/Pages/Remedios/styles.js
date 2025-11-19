@@ -1,228 +1,388 @@
 import { StyleSheet } from "react-native";
 
-const DARK_BLUE = '#023E8A';
-const PRIMARY_BLUE = '#0077B6';
-const LIGHT_BACKGROUND = '#E6F0FA'; // Fundo claro para consistência
-const SUCCESS_COLOR = '#28A745';
-const ERROR_COLOR = '#DC3545';
-
 export default StyleSheet.create({
-  fullContainer: { // Estilo de container principal adicionado para a ScrollView
-    flex: 1,
-    backgroundColor: LIGHT_BACKGROUND,
-  },
   container: {
-    padding: 20,
-    alignItems: "center",
+    flex: 1,
+    backgroundColor: '#F8F9FA',
   },
-  
-  // Box de Cadastro
-  box: {
-    width: "100%",
-    backgroundColor: "#fff",
-    padding: 20,
-    borderRadius: 12,
-    elevation: 5,
-    shadowColor: DARK_BLUE,
+
+  scrollContent: {
+    paddingBottom: 20,
+  },
+
+  // Header
+  header: {
+    backgroundColor: '#5B21B6',
+    paddingTop: 20,
+    paddingBottom: 25,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    borderBottomLeftRadius: 25,
+    borderBottomRightRadius: 25,
+    elevation: 8,
+    shadowColor: '#5B21B6',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
-    marginBottom: 30, // Espaço extra antes da lista
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    marginBottom: 20,
+  },
+  headerIconContainer: {
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    borderRadius: 50,
+    padding: 15,
+    marginBottom: 15,
   },
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
+    fontSize: 26,
+    fontWeight: 'bold',
+    color: '#FFF',
+    marginBottom: 5,
+    letterSpacing: 0.5,
+  },
+  subtitle: {
+    fontSize: 14,
+    color: 'rgba(255, 255, 255, 0.9)',
+    fontWeight: '500',
+  },
+
+  // Form Card
+  formCard: {
+    backgroundColor: '#FFF',
+    marginHorizontal: 20,
+    borderRadius: 20,
+    padding: 20,
     marginBottom: 20,
-    textAlign: "center",
-    color: DARK_BLUE,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  formTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#2C3E50',
+    marginBottom: 20,
+    textAlign: 'center',
+    letterSpacing: 0.3,
+  },
+
+  // Input Group
+  inputGroup: {
+    marginBottom: 18,
   },
   label: {
-    fontSize: 14,
-    marginBottom: 6,
-    color: '#555',
-    fontWeight: '600',
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#2C3E50',
+    marginBottom: 8,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F8F9FA',
+    borderRadius: 12,
+    paddingHorizontal: 15,
+    paddingVertical: 12,
+    borderWidth: 2,
+    borderColor: '#E5E7EB',
+    gap: 12,
   },
   input: {
-    borderWidth: 1,
-    borderColor: PRIMARY_BLUE,
-    borderRadius: 8,
-    padding: 10,
-    marginBottom: 16,
+    flex: 1,
     fontSize: 16,
-    color: DARK_BLUE,
+    color: '#2C3E50',
+    padding: 0,
   },
 
-  // Botões de Ação (Galeria/Câmera)
-  imageButtonsContainer: { // Container para alinhamento dos botões de imagem
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 10,
-  },
-  // Botões de Galeria e Câmera com estilo unificado
-  galleryButton: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: PRIMARY_BLUE,
-    padding: 12,
-    borderRadius: 8,
-    marginRight: 10,
-  },
-  cameraButton: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: PRIMARY_BLUE,
-    padding: 12,
-    borderRadius: 8,
-  },
-  buttonSalvar: {
-    backgroundColor: PRIMARY_BLUE,
-    padding: 16,
-    borderRadius: 8,
-    alignItems: "center",
-    marginTop: 20,
-    elevation: 3,
-  },
-  buttonTextSalvar: {
-    color: "#fff",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  buttonText: { // Texto usado nos botões de Galeria/Câmera
-    color: PRIMARY_BLUE,
-    fontSize: 14,
-    fontWeight: "bold",
-    marginLeft: 5,
-  },
-
-  // Pré-visualização de Imagem
-  imagePreviewContainer: {
+  // Image Section
+  imageSection: {
     marginTop: 10,
-    marginBottom: 10,
+    marginBottom: 20,
+  },
+  imageButtons: {
+    flexDirection: 'row',
+    gap: 10,
+  },
+  imageButton: {
+    flex: 1,
+    flexDirection: 'row',
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    padding: 10,
+    justifyContent: 'center',
+    backgroundColor: '#EDE9FE',
+    paddingVertical: 14,
+    borderRadius: 12,
+    gap: 8,
+    borderWidth: 2,
+    borderColor: '#DDD6FE',
+  },
+  imageButtonText: {
+    color: '#5B21B6',
+    fontSize: 15,
+    fontWeight: '600',
+  },
+
+  // Image Preview
+  imagePreviewCard: {
+    backgroundColor: '#F8F9FA',
+    borderRadius: 12,
+    padding: 15,
+    marginBottom: 20,
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#E5E7EB',
   },
   imagePreview: {
-    width: "80%",
-    height: 150,
-    borderRadius: 8,
-    marginVertical: 10,
-  },
-  removeImageText: {
-    color: ERROR_COLOR,
-    textDecorationLine: 'underline',
-    fontSize: 14,
-  },
-
-  // Lista de Remédios
-  listaBox: {
-    width: "100%",
-    backgroundColor: "#fff",
-    padding: 20,
+    width: '100%',
+    height: 200,
     borderRadius: 12,
-    elevation: 5,
-    shadowColor: DARK_BLUE,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
+    marginBottom: 12,
   },
-  listaTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 15,
-    color: DARK_BLUE,
-    borderBottomWidth: 2,
-    borderBottomColor: PRIMARY_BLUE,
-    paddingBottom: 5,
-  },
-  emptyListText: {
-    fontSize: 16,
-    color: '#777',
-    textAlign: 'center',
-    paddingVertical: 20,
-  },
-  remedioItem: {
+  removeImageButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: LIGHT_BACKGROUND,
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 10,
-    borderLeftWidth: 5,
-    borderLeftColor: PRIMARY_BLUE, // Detalhe visual na lateral
+    gap: 6,
   },
-  remedioIcon: {
-    marginRight: 10,
-    color: PRIMARY_BLUE,
+  removeImageText: {
+    color: '#EF4444',
+    fontSize: 14,
+    fontWeight: '600',
   },
-  remedioDetails: {
-    flex: 1,
+
+  // Save Button
+  saveButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#5B21B6',
+    paddingVertical: 16,
+    borderRadius: 12,
+    gap: 10,
+    elevation: 4,
+    shadowColor: '#5B21B6',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
   },
-  remedioTitle: {
+  saveButtonText: {
+    color: '#FFF',
     fontSize: 17,
     fontWeight: 'bold',
-    color: DARK_BLUE,
-  },
-  remedioText: {
-    fontSize: 14,
-    color: '#333',
-  },
-  remedioImagePreview: {
-    width: 50,
-    height: 50,
-    borderRadius: 5,
-    marginLeft: 10,
+    letterSpacing: 0.5,
   },
 
-
-  // Modal Styles
-  modalOverlay: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.6)",
+  // List Section
+  listSection: {
+    marginHorizontal: 20,
   },
-  modalBox: {
-    backgroundColor: "white",
-    padding: 25,
-    borderRadius: 12,
-    width: "80%",
+  listHeader: {
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 15,
   },
-  modalBoxSuccess: { // Cor de borda para sucesso
-    borderWidth: 3,
-    borderColor: SUCCESS_COLOR,
+  listTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#2C3E50',
+    letterSpacing: 0.3,
   },
-  modalBoxError: { // Cor de borda para erro
-    borderWidth: 3,
-    borderColor: ERROR_COLOR,
+  countBadge: {
+    backgroundColor: '#5B21B6',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
   },
-  modalText: {
-    fontSize: 18,
-    color: '#333',
-    marginBottom: 20,
+  countText: {
+    color: '#FFF',
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+
+  // Empty State
+  emptyState: {
+    backgroundColor: '#FFF',
+    borderRadius: 15,
+    padding: 40,
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#E5E7EB',
+    borderStyle: 'dashed',
+  },
+  emptyText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#6B7280',
+    marginTop: 15,
+    marginBottom: 5,
+  },
+  emptySubtext: {
+    fontSize: 14,
+    color: '#9CA3AF',
     textAlign: 'center',
   },
+
+  // Remedio Card
+  remedioCard: {
+    backgroundColor: '#FFF',
+    borderRadius: 15,
+    padding: 15,
+    marginBottom: 12,
+    borderLeftWidth: 4,
+    borderLeftColor: '#5B21B6',
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+  },
+  remedioHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  remedioIconContainer: {
+    width: 45,
+    height: 45,
+    borderRadius: 22.5,
+    backgroundColor: '#EDE9FE',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  remedioInfo: {
+    flex: 1,
+  },
+  remedioNome: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    color: '#2C3E50',
+    marginBottom: 3,
+    letterSpacing: 0.2,
+  },
+  remedioPaciente: {
+    fontSize: 14,
+    color: '#6B7280',
+    fontWeight: '500',
+  },
+  deleteButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#FEE2E2',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  // Remedio Body
+  remedioBody: {
+    gap: 12,
+  },
+  remedioDetail: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F8F9FA',
+    padding: 10,
+    borderRadius: 10,
+    gap: 10,
+  },
+  remedioDetailText: {
+    fontSize: 14,
+    color: '#2C3E50',
+    fontWeight: '500',
+    flex: 1,
+  },
+  remedioImage: {
+    width: '100%',
+    height: 150,
+    borderRadius: 12,
+  },
+
+  // Modal
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+  },
+  modalContent: {
+    width: '85%',
+    maxWidth: 400,
+    backgroundColor: '#FFF',
+    padding: 30,
+    borderRadius: 25,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.3,
+    shadowRadius: 15,
+    elevation: 15,
+  },
+  modalIconContainer: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  modalTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#2C3E50',
+    marginBottom: 10,
+    letterSpacing: 0.5,
+  },
+  modalText: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#6B7280',
+    textAlign: 'center',
+    marginBottom: 25,
+    lineHeight: 24,
+  },
   modalButton: {
-    backgroundColor: PRIMARY_BLUE,
-    paddingHorizontal: 30,
-    paddingVertical: 10,
-    borderRadius: 8,
-    alignItems: "center",
+    backgroundColor: '#5B21B6',
+    paddingVertical: 14,
+    paddingHorizontal: 40,
+    borderRadius: 12,
+    elevation: 4,
+    shadowColor: '#5B21B6',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
   },
   modalButtonText: {
-    color: "white",
-    fontWeight: "bold",
+    color: '#FFF',
     fontSize: 16,
+    fontWeight: 'bold',
+    letterSpacing: 0.5,
   },
+
+  // ... todos os estilos que você já tem ...
+
+  // Estilos para a nova seção de horários
+  horarioContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  addButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 5,
+    gap: 8,
+  },
+  addButtonText: {
+    color: '#5B21B6',
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  removeButton: {
+    marginLeft: 10,
+  },
+  
 });

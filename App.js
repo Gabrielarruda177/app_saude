@@ -1,6 +1,8 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import * as Notifications from 'expo-notifications';
+
 
 // --- IMPORTS DAS PÁGINAS ---
 import Splash from "./src/Pages/Splash";
@@ -47,5 +49,25 @@ export default function App() {
         <Stack.Screen name="Fruta" component={Fruta} />
       </Stack.Navigator>
     </NavigationContainer>
-  );
+ 
+);
+
+useEffect(() => {
+  async function requestPermissions() {
+    const { status } = await Notifications.requestPermissionsAsync();
+    if (status !== 'granted') {
+      alert('Ei! Você precisa permitir as notificações para os lembretes de remédio funcionarem.');
+    }
+  }
+  requestPermissions();
+}, []);
+
+// Configura como a notificação vai aparecer (com som e vibração)
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
 }
